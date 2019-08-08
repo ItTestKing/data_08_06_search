@@ -29,7 +29,7 @@ class ReadFile(object):
                 #打印内容
                 try:
                     with open(self.file_path, 'r+',encoding='UTF-8')as file:
-                        file.read()
+                        return file.read()
                 except Exception as e:
                     print(e)
 

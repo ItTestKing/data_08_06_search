@@ -6,8 +6,10 @@ from con_sql import Sql
 
 class Search():
     dis_name = []
-    path = argv[1]
-    search_file_name = argv[2]
+#    path = argv[1]
+    path = 'c'
+    # search_file_name = argv[2]
+    search_file_name = None
     search_dir_name = None
     search_disc_name = None
     search_disc = None
@@ -82,10 +84,11 @@ class Search():
                         if self.check_path(file_path):
                             try:
                                 Sql().write_file(file_name=filename, file_path=file_path)
+                                return file_path
                             except Exception as e:
                                 print("提交数据库失败 {}文件名：{}文件路径：{}".format(e, filename, file_path))
 
-            print("指定盘符：{} 搜索完毕".format(discname))
+            print("指定盘符：{} 搜索完毕,添加的路径为{}".format(discname,filename))
 
 
 # Search().disc_name("12")
