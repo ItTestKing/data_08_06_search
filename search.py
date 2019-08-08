@@ -30,16 +30,16 @@ class Search():
 
     def disc_name(self):
         # 判断要搜索的盘符是否存在，disc是要传入的参数。
-
+        dis_name =[]
         if isinstance(self.path, str):
-            if len(self.path) > 1:
+            if len(self.path) > 1 and self.path != 'all':
                 if os.path.exists(self.path):
                     return self.path
                 else:
                     print("您输入的路径不存在")
                     return 0
 
-            if len(self.path) == 1:
+            if len(self.path) == 1 :
                 disc_name = self.path.upper()
                 disc_names = psutil.disk_partitions()
                 for disc in disc_names:
@@ -51,18 +51,31 @@ class Search():
                 else:
                     print("没有这个盘符")
                     return 0
+
+            if  self.path == 'all':
+                disc_names = psutil.disk_partitions()
+                for disc in disc_names:
+                    disc_devices = disc.device
+                    dis_name.append(disc_devices)
+                return dis_name
         else:
             print("请输入字符")
             return 0
-
-    def search_file(self):
+    def search_begin(self):
+        #这个方法主要是判断:sele.path，如果是路径，就开始搜索，如果，输入的是all,就全盘搜索。
+        result = self.disc_name()
+        if isinstance(result,str):
+            self.search_file(result)
+        if isinstance(result,list):
+            for i in result:
+                self.search_file(i)
+    def search_file(self,discname):
 
         if self.disc_name() == 0:
             pass
         else:
-            self.search_disc_name = self.disc_name()
 
-            for parent, dirname, filenames in os.walk(self.search_disc_name, followlinks=True):
+            for parent, dirname, filenames in os.walk(discname, followlinks=True):
                 for filename in filenames:
                     file_path = os.path.join(parent, filename)
                     if filename == self.search_file_name:
@@ -72,8 +85,8 @@ class Search():
                             except Exception as e:
                                 print("提交数据库失败 {}文件名：{}文件路径：{}".format(e, filename, file_path))
 
-            print("指定盘符：{} 搜索完毕".format(self.search_disc_name))
+            print("指定盘符：{} 搜索完毕".format(discname))
 
 
 # Search().disc_name("12")
-Search().search_file()
+Search().search_begin()
